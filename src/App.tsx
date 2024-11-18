@@ -13,7 +13,7 @@ function App() {
       <Route path={`${ROUTES.HOME}/:id`} element={<MealPage />} />
     </Routes>
   </BrowserRouter>
-  );
+  );  
 }
 
 export default App
