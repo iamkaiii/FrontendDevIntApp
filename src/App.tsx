@@ -6,7 +6,7 @@ import { MealPage } from "./components/MealPage";
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/FrontendDevIntApp">
     <Routes>
       <Route path={ROUTES.START} index element={<WelcomePage />} />
       <Route path={ROUTES.HOME} index element={<MainPage />} />
