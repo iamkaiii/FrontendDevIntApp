@@ -12,6 +12,7 @@ export const MainPage = () => {
     const [products, SetProducts] = useState<MilkProducts[]>([]);
     const navigate = useNavigate();
     const [name, setName] = useState('');
+    
     useEffect(() => {
         getAllProducts().then((result: { MilkProducts: SetStateAction<MilkProducts[]>; }) => {
             SetProducts(result.MilkProducts);

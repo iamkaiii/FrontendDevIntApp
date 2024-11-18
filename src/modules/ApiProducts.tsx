@@ -4,7 +4,7 @@ import { MOCK_DATA_PRODUCTS } from "./MockDataProducts";
 export const getProductsByName = async (name: string): Promise<ApiResponse> => {
     try {
 
-        const response = await fetch(`http://localhost:8001/api/secret/get_meal_by_meal_info/${name}`);
+        const response = await fetch(`/api/secret/get_meal_by_meal_info/${name}`);
         const info = await response.json();
         console.log(info);
         return { MilkProducts: info["meals"]};
@@ -27,7 +27,7 @@ export const getProductByID = async (
     id: string | number
 ): Promise<MilkProducts> => {
     try {
-        const response = await fetch(`http://localhost:8001/api/meal/${id}`);
+        const response = await fetch(`/api/meal/${id}`);
         const info = await response.json();
         console.log(info);
         return info["meal"];
@@ -41,7 +41,7 @@ export const getProductByID = async (
 
 export const getAllProducts = async (): Promise<ApiResponse> => {
     try {
-        const response = await fetch(`http://localhost:8001/api/meals`);
+        const response = await fetch(`/api/meals`);
         const info = await response.json();
         console.log(info);
         return { MilkProducts: info["Meals"]};
