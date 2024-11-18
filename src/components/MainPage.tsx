@@ -21,7 +21,7 @@ export const MainPage = () => {
 
     const onSubmitFinderHandler = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault(); // Предотвращаем перезагрузку страницы
-        if (name) { // Проверяем на наличие имени перед запросом
+        if (name) {
             getProductsByName(name).then((result) => {
                 SetProducts(result.MilkProducts);
             });
