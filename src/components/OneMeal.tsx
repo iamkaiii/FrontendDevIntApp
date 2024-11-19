@@ -11,12 +11,12 @@ export const OneProduct : FC<OneMilkProduct> = ( {product, imageClickHandler} : 
 
     let image : string = ''
 
-    if (product.image_url === undefined || product.image_url == "") {
-        image = "http://localhost:9000/development-internet-applications/nophoto.jpg"
+    if (!product.image_url) {
+        image = "nophoto.png";
     } else {
-        image = product.image_url
+        image = product.image_url;
     }
-
+    
 
     return (
 

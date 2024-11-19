@@ -29,12 +29,13 @@ export const MealPage: FC = () => {
     }, [id]);
 
     if (mealInfo?.image_url === undefined) {
-        image = 'http://localhost:9000/development-internet-applications/nophoto.jpg';
+        image = "../nophoto.png";
+        console.log("no photo is there")
     } else {
-        image = mealInfo.image_url; // Исправлено с использованием шаблонной строки
+        image = mealInfo.image_url; 
     }
-    console.log("mealInfo");
-    console.log(mealInfo);
+    
+
 
     const replaceNewlines = (text: string) => {
         return text.split('/n').map((line, index) => (

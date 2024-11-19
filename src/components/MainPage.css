@@ -19,7 +19,7 @@ button[name="home-button"] {
     border:none;
     height: 120px;
     width: 120px;
-    background-image: url("http://localhost:9000/development-internet-applications/mos_logo.png");
+    background-image: url("../assets/mos_logo.png");
     object-fit: cover;
     background-size: cover;
     background-position: center center;

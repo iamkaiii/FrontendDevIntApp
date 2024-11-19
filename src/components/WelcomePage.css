@@ -10,7 +10,7 @@ body{
 }
 
 .space{
-    background: linear-gradient( rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45) ), url("http://localhost:9000/development-internet-applications/start-background.jpg");
+    background: linear-gradient( rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45) ),  url("../assets/start-background.jpg");
     background-size: cover;
     height: 100vh;
 }
@@ -44,7 +44,7 @@ h1{
     border:none;
     height: 120px;
     width: 120px;
-    background-image: url("http://localhost:9000/development-internet-applications/mos_logo.png");
+    background-image:  url("../assets/mos_logo.png");
     object-fit: cover;
     background-size: cover;
     background-position: center center;
