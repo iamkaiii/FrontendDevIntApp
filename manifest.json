@@ -1,7 +1,7 @@
 {
     "name": "Milk Kitchen Updates",
     "short_name": "Milk Kitchen Updates",
-    "start_url": "/",
+    "start_url": "/FrontendDevIntApp",
     "display": "standalone",
     "background_color": "#fdfdfd",
     "theme_color": "#db4938",
