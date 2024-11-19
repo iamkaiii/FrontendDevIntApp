@@ -28,9 +28,9 @@ export const MealPage: FC = () => {
 
     }, [id]);
 
-    if (mealInfo?.image_url === undefined) {
+    if (mealInfo?.image_url === undefined || mealInfo?.image_url === "" || !mealInfo?.image_url) {
         image = "../nophoto.png";
-        console.log("no photo is there")
+
     } else {
         image = mealInfo.image_url; 
     }
@@ -52,16 +52,18 @@ export const MealPage: FC = () => {
                 <Link to={ROUTES.START}>
                     <button name="home-button"></button>
                 </Link>
+            </div>
+
+            <div className="crumbs1">
                 <div className="MP_breadcrumbs1">
-                    <BreadCrumbs 
-                       crumbs={[
-                        { label: ROUTE_LABELS.HOME, path: ROUTES.HOME },
-                        { label: mealInfo?.meal_info || "Продукт" },
-                    ]} 
-                    />
-                </div>
-            </div> 
-            <div className="container1">
+                        <BreadCrumbs 
+                        crumbs={[
+                            { label: ROUTE_LABELS.HOME, path: ROUTES.HOME },
+                            { label: mealInfo?.meal_info || "Продукт" },
+                        ]} 
+                        />
+            </div>
+            </div>
                 <div className="card1">
                     <div className="card-image-container1">
                         <img src={image} className="card-image1" alt={mealInfo?.meal_brand} />
@@ -72,7 +74,6 @@ export const MealPage: FC = () => {
                         <p>{mealInfo && replaceNewlines(mealInfo.meal_detail)}</p>
                     </div>
                 </div>
-            </div>
         </div>
     );
 }

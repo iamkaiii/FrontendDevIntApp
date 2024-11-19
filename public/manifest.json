@@ -1,7 +1,7 @@
 {
-    "name": "Milk Kitchen",
-    "short_name": "Milk Kitchen",
-    "start_url": "/",
+    "name": "Milk Kitchen Last Version",
+    "short_name": "Milk Kitchen Last Version",
+    "start_url": "/FrontendDevIntApp",
     "display": "standalone",
     "background_color": "#fdfdfd",
     "theme_color": "#db4938",

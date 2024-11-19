@@ -1,48 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 /**/
 
-.space{
-    cursor: auto;
-    font-family: 'Montserrat', sans-serif;
-}
-
-button[name="home-button1"] {
-    border:none;
-    height: 120px;
-    width: 120px;
-    background-image:  url("../assets/mos_logo.png");
-    object-fit: cover;
-    background-size: cover;
-    background-position: center center;
-    border-radius: 15px; /* Закругление углов у кнопки */
-    cursor: pointer; /* Изменяем курсор на указатель при наведении */
-    background-color: white;
-}
 
 button:hover {
     background-color: #fff0f0;
 }
 
 
-.container1 {
-    background-color: #f4f4f4;
-    padding: 10px;
+.card1{
+    margin-top:20px;
     margin-left: 150px;
     margin-right: 150px;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-    margin-top: 20px;
+    margin-bottom: 20px;
     border: 2px solid #c22;
     border-radius: 20px;
-}
-
-
-.card1{
-    width: 1000px;
-    border-radius: 20px;
     background-color: #f4f4f4;
-    padding: 3%;
+    padding: 2%;
     display: flex;
     flex-direction: row;
     justify-content: start;
@@ -53,11 +26,6 @@ button:hover {
     flex-direction: column;
     padding-left: 45px;
     justify-content: start;
-}
-
-.card-image-n-text1{
-    display: flex;
-    flex-direction: row;
 }
 
 .card-image1{
@@ -78,4 +46,78 @@ button:hover {
     font-size: 18px;
     font-weight: bold;
     margin-bottom: 20px;
+}
+
+.crumbs1{
+    margin-left: 130px;
+}
+
+@media(max-width: 1400px){
+    
+    .card1 {
+        padding: 5%;
+        margin-right: 30px;
+        
+    }
+
+    .card-image1 {
+        height: 300px; /* Уменьшаем размер изображения */
+    }
+
+    .title-in-card1 {
+        font-size: 16px; /* Уменьшаем размер шрифта */
+        margin-bottom: 15px;
+    }
+
+    button[name="home-button"] {
+        height: 120px;
+        width: 120px;
+    }
+}
+
+@media(max-width: 760px){
+    .card-image1 {
+        height: 250px; /* Уменьшаем размер изображения */
+    }
+
+    .card1{
+        flex-direction: column; /* Переводим карточку в вертикальное положение */
+        justify-content: center;
+        align-items: center;
+    }
+
+    .card-text1{
+        margin-top: 20px;
+    }
+}
+
+/* Медиа-запросы для экранов шириной до 480px (очень маленькие экраны, смартфоны) */
+@media (max-width: 470px) {
+
+    .crumbs1{
+        margin-left: -10px;
+    }
+   
+    .card1 {
+        width: 90%;
+        flex-direction: column; /* Карточки вертикальные */
+        padding: 10px;
+        margin-left:5px;
+        margin-right:5x;
+    }
+
+    .card-image1 {
+        height: 215px; /* Уменьшаем картинку еще больше */
+    }
+
+    .title-in-card1 {
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+
+    button[name="home-button"] {
+        height: 120px;
+        width: 120px;
+        margin:5px;
+    }
 }

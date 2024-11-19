@@ -27,6 +27,7 @@
   
   .breadcrumbs .slash {
     color: var(--separator_color); /* Цвет разделителя */
+    margin:2px
   }
   
   .breadcrumbs li:last-child {
@@ -43,3 +44,47 @@
   .breadcrumbs li a:hover {
     color: var(--active_color); /* При наведении пройденные страницы становятся активного цвета */
   }
+
+  
+  @media(max-width: 940px){
+    .breadcrumbs {
+      font-size: 24px; /* Уменьшаем размер шрифта для мобильных устройств */
+      gap: 2px; /* Уменьшаем расстояние между элементами */
+      margin-left: 20px; /* Уменьшаем отступ слева */
+      margin-right: 20px; /* Уменьшаем отступ справа */
+      align-items: center;
+    }
+    
+  }
+
+  @media(max-width: 760px){
+    .breadcrumbs {
+      font-size: 18px; /* Уменьшаем размер шрифта для мобильных устройств */
+
+    }
+    
+  }
+
+  @media(max-width: 680px){
+    .breadcrumbs {
+      font-size: 15px; /* Уменьшаем размер шрифта для мобильных устройств */
+
+    }
+    
+  }
+
+  @media (max-width: 470px) {
+    .breadcrumbs {
+        font-size: 18px; /* Уменьшаем размер шрифта для мобильных устройств */
+        gap: 2px; /* Уменьшаем расстояние между элементами */
+        align-items: flex-start; /* Выравнивание по левому краю */
+        margin-left: 20px; /* Уменьшаем отступ слева */
+        margin-right: 20px; /* Уменьшаем отступ справа */
+        align-items: center;
+    }
+
+    .breadcrumbs .slash {
+      color: var(--separator_color); /* Цвет разделителя */
+      margin: 2px;
+    }
+}

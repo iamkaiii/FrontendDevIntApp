@@ -5,7 +5,6 @@
 body{
     cursor: auto;
     font-family: 'Golos Text', sans-serif;
-    
     background-size: cover;
 }
 
@@ -27,13 +26,13 @@ header{
     display: flex;
     flex-direction: row;
     align-items: center;
+    gap: 15%
 }
 
 h1{
     color: #cc2222;
     font-size: 32px;
     font-weight: 600;
-    margin-left: 300px;;
 }
 
 .home-button{
@@ -90,4 +89,27 @@ button{
 
 .to-home-button:hover {
     background-color: #fff0f0;
+}
+
+
+@media (max-width: 470px) {
+
+    
+    /* Стилизуем элементы для экранов до 480px (смартфоны) */
+    h1 {
+        font-size: 20px; /* Еще меньше шрифт на маленьких экранах */
+    }
+
+    .description {
+        font-size: 18px;
+    }
+
+    .to-home-button {
+        font-size: 16px; /* Уменьшаем шрифт еще больше */
+        padding: 6px 20px;
+    }
+
+    .space {
+        background-size: cover; /* Убедитесь, что изображение масштабируется */
+    }
 }
