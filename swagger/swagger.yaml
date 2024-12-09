@@ -1,0 +1,631 @@
+definitions:
+  ds.Meals:
+    properties:
+      id:
+        type: integer
+      image_url:
+        type: string
+      meal_brand:
+        type: string
+      meal_detail:
+        type: string
+      meal_info:
+        type: string
+      meal_weight:
+        type: string
+      status:
+        type: boolean
+    type: object
+  ds.MilkRequests:
+    properties:
+      address:
+        type: string
+      creator:
+        $ref: '#/definitions/ds.Users'
+      creator_id:
+        type: integer
+      date_create:
+        type: string
+      date_finish:
+        type: string
+      date_update:
+        type: string
+      delivery_date:
+        type: string
+      id:
+        type: integer
+      moderator:
+        $ref: '#/definitions/ds.Users'
+      moderator_id:
+        type: integer
+      recipient_name:
+        type: string
+      recipient_surname:
+        type: string
+      status:
+        type: integer
+    type: object
+  ds.Users:
+    properties:
+      id:
+        type: integer
+      is_moderator:
+        type: boolean
+      login:
+        type: string
+      password:
+        type: string
+    type: object
+  schemas.AddMealToMilkReqResponse:
+    properties:
+      mealID:
+        type: integer
+      messageResponse:
+        type: string
+      milkRequestID:
+        type: integer
+    type: object
+  schemas.ChangePassword:
+    properties:
+      new_password:
+        type: string
+      old_password:
+        type: string
+    type: object
+  schemas.CreateMealRequest:
+    properties:
+      image_url:
+        type: string
+      meal_brand:
+        type: string
+      meal_detail:
+        type: string
+      meal_info:
+        type: string
+      meal_weight:
+        type: string
+      status:
+        type: boolean
+    type: object
+  schemas.CreateMealResponse:
+    properties:
+      id:
+        type: integer
+      messageResponse:
+        type: string
+    type: object
+  schemas.DeleteMealFromMilkReqRequest:
+    properties:
+      meal_id:
+        type: integer
+    type: object
+  schemas.DeleteMealResponse:
+    properties:
+      id:
+        type: integer
+      messageResponse:
+        type: string
+    type: object
+  schemas.GetAllMealsResponse:
+    properties:
+      count:
+        type: integer
+      meals:
+        items:
+          $ref: '#/definitions/ds.Meals'
+        type: array
+      milk_req_ID:
+        type: integer
+    type: object
+  schemas.GetAllMilkRequestsWithParamsResponse:
+    properties:
+      milkRequests:
+        items:
+          $ref: '#/definitions/ds.MilkRequests'
+        type: array
+    type: object
+  schemas.GetMealResponse:
+    properties:
+      meal:
+        $ref: '#/definitions/ds.Meals'
+    type: object
+  schemas.LoginUserRequest:
+    properties:
+      login:
+        type: string
+      password:
+        type: string
+    type: object
+  schemas.LogoutUserRequest:
+    properties:
+      login:
+        type: string
+    type: object
+  schemas.RegisterUserRequest:
+    properties:
+      login:
+        type: string
+      password:
+        type: string
+    type: object
+  schemas.ResponseMessage:
+    type: object
+  schemas.UpdateAmountMilkReqMealRequest:
+    properties:
+      amount:
+        type: integer
+      meal_id:
+        type: integer
+    type: object
+  schemas.UpdateMealRequest:
+    properties:
+      image_url:
+        type: string
+      meal_brand:
+        type: string
+      meal_detail:
+        type: string
+      meal_info:
+        type: string
+      meal_weight:
+        type: string
+      status:
+        type: boolean
+    type: object
+  schemas.UpdateMealResponse:
+    properties:
+      id:
+        type: integer
+      messageResponse:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /api/change_user_info:
+    put:
+      consumes:
+      - application/json
+      description: Change the password of the authenticated user
+      parameters:
+      - description: Password change data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.ChangePassword'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Password changed successfully
+          schema:
+            $ref: '#/definitions/schemas.ResponseMessage'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/schemas.ResponseMessage'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/schemas.ResponseMessage'
+      security:
+      - BearerAuth: []
+      summary: Change user password
+      tags:
+      - users
+  /api/login_user:
+    post:
+      consumes:
+      - application/json
+      description: Authenticates a user and returns a JWT token.
+      parameters:
+      - description: User login data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.LoginUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User logged in successfully
+          schema:
+            $ref: '#/definitions/schemas.ResponseMessage'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/schemas.ResponseMessage'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/schemas.ResponseMessage'
+      summary: Login a user
+      tags:
+      - users
+  /api/logout:
+    post:
+      consumes:
+      - application/json
+      description: Log out the user by blacklisting the token
+      parameters:
+      - description: User login data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.LogoutUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User logged out successfully
+          schema:
+            $ref: '#/definitions/schemas.ResponseMessage'
+        "401":
+          description: Missing token
+          schema:
+            $ref: '#/definitions/schemas.ResponseMessage'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/schemas.ResponseMessage'
+      summary: Logout
+      tags:
+      - users
+  /api/meal:
+    post:
+      consumes:
+      - application/json
+      description: Create meal with properties
+      parameters:
+      - description: Meal data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.CreateMealRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/schemas.CreateMealResponse'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/schemas.ResponseMessage'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/schemas.ResponseMessage'
+      security:
+      - BearerAuth: []
+      summary: Create meal
+      tags:
+      - meals
+  /api/meal/{ID}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete meal using it's ID
+      parameters:
+      - description: Meal ID
+        in: path
+        name: ID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schemas.DeleteMealResponse'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/schemas.ResponseMessage'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/schemas.ResponseMessage'
+      security:
+      - BearerAuth: []
+      summary: Delete meal by ID
+      tags:
+      - meals
+    get:
+      consumes:
+      - application/json
+      description: Get info about meal using its ID
+      parameters:
+      - description: Meal ID
+        in: path
+        name: ID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schemas.GetMealResponse'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/schemas.ResponseMessage'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/schemas.ResponseMessage'
+      security:
+      - BearerAuth: []
+      summary: Get meal by ID
+      tags:
+      - meals
+    put:
+      consumes:
+      - application/json
+      description: Update meal using it's ID with parametres
+      parameters:
+      - description: Meal ID
+        in: path
+        name: ID
+        required: true
+        type: string
+      - description: Update meal data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.UpdateMealRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schemas.UpdateMealResponse'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/schemas.ResponseMessage'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/schemas.ResponseMessage'
+      security:
+      - BearerAuth: []
+      summary: Update meal by ID
+      tags:
+      - meals
+  /api/meal/change_pic/{ID}:
+    post:
+      consumes:
+      - application/json
+      description: Delete meal using it's ID
+      parameters:
+      - description: Meal ID
+        in: path
+        name: ID
+        required: true
+        type: string
+      - description: File
+        in: formData
+        name: image
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Picture was changed sucessfully
+          schema:
+            $ref: '#/definitions/schemas.ResponseMessage'
+      security:
+      - BearerAuth: []
+      summary: Change picture By ID
+      tags:
+      - meals
+  /api/meal_to_milk_request/{ID}:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint allows you to add a meal to a milk request by it's
+        ID.
+      parameters:
+      - description: Meal ID
+        in: path
+        name: ID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Meal added successfully
+          schema:
+            $ref: '#/definitions/schemas.AddMealToMilkReqResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/schemas.ResponseMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/schemas.ResponseMessage'
+      security:
+      - BearerAuth: []
+      summary: Add meal to milk request
+      tags:
+      - meals
+  /api/meals:
+    get:
+      consumes:
+      - application/json
+      description: Returns a list of all meals.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of meals retrieved successfully
+          schema:
+            $ref: '#/definitions/schemas.GetAllMealsResponse'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/schemas.ResponseMessage'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/schemas.ResponseMessage'
+      security:
+      - BearerAuth: []
+      summary: Get all meals
+      tags:
+      - meals
+  /api/milk_req_meals/{ID}:
+    delete:
+      consumes:
+      - application/json
+      description: Удаляет блюдо из запроса на молоко по ID запроса и MealID
+      parameters:
+      - description: ID заявки
+        in: path
+        name: ID
+        required: true
+        type: string
+      - description: Delete meal from meal request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.DeleteMealFromMilkReqRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Meal was deleted from milk request
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/schemas.ResponseMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/schemas.ResponseMessage'
+      security:
+      - BearerAuth: []
+      summary: Удалить блюдо из запроса на молоко
+      tags:
+      - meals_and_requests
+    put:
+      consumes:
+      - application/json
+      description: Обновляет количество продукта в конкретной заявке
+      parameters:
+      - description: Milk request ID
+        in: path
+        name: ID
+        required: true
+        type: string
+      - description: Update amount meals in milk request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.UpdateAmountMilkReqMealRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Meal was deleted from milk request
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/schemas.ResponseMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/schemas.ResponseMessage'
+      summary: Обновить количество продуктов в заявке
+      tags:
+      - meals_and_requests
+  /api/milk_requests:
+    get:
+      consumes:
+      - application/json
+      description: Получить список запросов на молоко с возможностью фильтрации по
+        статусу и датам
+      parameters:
+      - description: Статус заявки
+        in: query
+        name: status
+        type: string
+      - description: Наличие статуса
+        in: query
+        name: is_status
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schemas.GetAllMilkRequestsWithParamsResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/schemas.ResponseMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/schemas.ResponseMessage'
+      security:
+      - BearerAuth: []
+      summary: Получить все заявки на молочную кухню с параметрами
+      tags:
+      - milk_requests
+  /api/register_user:
+    post:
+      consumes:
+      - application/json
+      description: Registers a new user.
+      parameters:
+      - description: User registration data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.RegisterUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User registered successfully
+          schema:
+            $ref: '#/definitions/schemas.ResponseMessage'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/schemas.ResponseMessage'
+        "409":
+          description: User with this login already exists
+          schema:
+            $ref: '#/definitions/schemas.ResponseMessage'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/schemas.ResponseMessage'
+      summary: Register a new user
+      tags:
+      - users
+swagger: "2.0"

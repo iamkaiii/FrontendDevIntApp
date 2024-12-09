@@ -3,6 +3,9 @@ import { ROUTES } from "./modules/Routes";
 import { WelcomePage } from './components/WelcomePage';
 import { MainPage } from "./components/MainPage"
 import { MealPage } from "./components/MealPage";
+import { RegisterPage } from "./components/RegisterPage";
+import { AuthPage } from "./components/AuthPage";
+import { ProfilePage } from "./components/ProfilePage";
 
 function App() {
   return (
@@ -11,6 +14,9 @@ function App() {
       <Route path={ROUTES.START} index element={<WelcomePage />} />
       <Route path={ROUTES.HOME} index element={<MainPage />} />
       <Route path={`${ROUTES.HOME}/:id`} element={<MealPage />} />
+      <Route path={`${ROUTES.REGISTER}`} element={<RegisterPage />} />
+      <Route path={`${ROUTES.AUTHORIZATION}`} element={<AuthPage />} />
+      <Route path={`${ROUTES.PROFILE}`} element={<ProfilePage />} />
     </Routes>
   </BrowserRouter>
   );  

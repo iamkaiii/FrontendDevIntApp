@@ -1,0 +1,61 @@
+
+.h2-reg-class{
+    margin-top: 30px;
+    text-align: center;
+    color: #c22;
+    
+}
+
+.container-reg{
+    margin: 20px;
+    background-color: rgb(241, 241, 241);
+    border-radius: 20px;
+    width: 600px;
+    border: 2px solid #c22;
+}
+
+
+.space-reg { /* Новый родительский контейнер */
+    display: flex;
+    flex-direction: column; /* Выравнивание по вертикали */
+    height: 100vh; /* Занимает всю высоту viewport */
+    align-items: center; /* Центрирование по горизонтали */
+}
+
+.container-header-reg{
+    text-align: center;
+    margin:5px;
+    font-size: 20px;
+}
+
+.h2-reg-to-auth{
+    color: #c22;
+    text-decoration: underline;
+    text-decoration-color: #c22;; /* Замените blue на нужный цвет */
+}
+
+.container-data-reg{
+    gap: 10px;
+    margin: 20px;
+    display:flex;
+    flex-direction: column;
+    align-items: center; /* Центрирование по горизонтали */
+    
+}
+
+.container-data-reg input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    box-sizing: border-box; /* Учитывает padding и border в ширину */
+}
+
+.button-reg{
+    font-size: 16px;
+    border-radius: 10px;
+    margin: 0px;
+    width: 212px;
+}
+

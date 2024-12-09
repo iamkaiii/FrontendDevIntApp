@@ -44,7 +44,7 @@ export const getAllProducts = async (): Promise<ApiResponse> => {
         const response = await fetch(`/api/meals`);
         const info = await response.json();
         console.log(info);
-        return { MilkProducts: info["Meals"]};
+        return { MilkProducts: info["meals"]};
     } catch (error) {
         console.error("Ошибка при получении данных из API, используем MOCK_DATA_PRODUCTS", error);
         return {MilkProducts: MOCK_DATA_PRODUCTS.MilkProducts};

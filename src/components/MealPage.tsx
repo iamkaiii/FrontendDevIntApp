@@ -48,10 +48,13 @@ export const MealPage: FC = () => {
 
     return (
         <div className="space1">
-            <div className="header1">
-                <Link to={ROUTES.START}>
-                    <button name="home-button"></button>
-                </Link>
+            <div className="header-welcome">
+                    <Link to={ROUTES.START}>
+                        <button className="home-button"></button>
+                    </Link>
+                    <Link to={ROUTES.HOME} className="no-underline">
+                        <h2 className="h1-welcome">Продукты</h2>
+                    </Link>
             </div>
 
             <div className="crumbs1">

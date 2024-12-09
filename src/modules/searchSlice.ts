@@ -15,11 +15,14 @@ const searchSlice = createSlice({
     name: "search",
     initialState,
     reducers: {
+
         setProductName(state, action: PayloadAction<string>) {
             state.productName = action.payload;
+            console.log(action.payload)
         },
         setFilteredProducts(state, action: PayloadAction<MilkProducts[]>) {
             state.filteredProducts = action.payload;
+            console.log(action.payload)
         },
     },
 });

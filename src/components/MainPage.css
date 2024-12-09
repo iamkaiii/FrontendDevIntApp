@@ -4,7 +4,7 @@
 
 .space{
     cursor: auto;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Golos Text', sans-serif;
 }
 
 .header{
@@ -50,7 +50,7 @@ form {
 
 
 /* CSS для кнопки поиска */
-button{
+.button-def{
     font-size: 20px;
     border: 2px solid #c22; /* Без границы */
     border-radius: 15px; /* Закругление углов у кнопки */
@@ -58,10 +58,17 @@ button{
     cursor: pointer; /* Изменяем курсор на указатель при наведении */
     background: white;
     color: black; /* Цвет текста кнопки */
+   
 }
 
-button:hover {
-    background-color: #fff0f0;
+.profile-button{
+    font-size: 20px;
+    border: none;
+    border-radius: 15px; /* Закругление углов у кнопки */
+    padding: 10px 15px; /* Отступы внутри кнопки */
+    cursor: pointer; /* Изменяем курсор на указатель при наведении */
+    background: none;
+    color: black; /* Цвет текста кнопки */
 }
 
 .container-main {
@@ -74,12 +81,14 @@ button:hover {
     border: 2px solid #c22;
     border-radius: 20px;
     justify-items: center;
+    margin-bottom: 20px;
 }
 
 .card{
     margin: 10px;
-    width: 350px;
+    width: 380px;
     border-radius: 20px;
+    border: none;
     background-color: #f4f4f4;
     padding: 3%;
     display: flex;
@@ -116,24 +125,36 @@ button:hover {
     margin-left: 130px;
 }
 
+.profile-button, .auth-button {
+    font-size: 32px; /* Размер текста как у h2-auth-prods */
+    font-weight: 600; /* Толщина текста */
+    color: #c22; /* Цвет текста */
+    cursor: pointer; /* Указатель при наведении */
+    background: none; /* Убираем фон */
+    border: none; /* Убираем границы */
+    margin-left: 20px; /* Отступ для кнопок */
+    padding: 0; /* Убираем внутренние отступы */
+}
+
+
+
 
 
 .card-button{
-    padding: 8px 10px;
     border-radius: 10px;
     border: 2px solid #c22;
     text-decoration: none;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 500;
     background: none;
 }
+
 .card-button:hover {
     background-color: #fff0f0;
 }
 
 .buttons-in-card{
     display: flex;
-    gap: 10px;
 }
 
 .meals-count {
@@ -148,6 +169,24 @@ button:hover {
     width: 100%; /* Занимает всю ширину родительского контейнера */
     padding: 10px; /* Добавление внутренних отступов для удобства */
     box-sizing: border-box; /* Учитывает внутренние отступы и рамки в общей ширине */
+}
+
+.super-header-main {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center; /* Выравнивает элементы по вертикали */
+    justify-content: start; /* Равномерно распределяет элементы */
+    width: 100%;
+    gap:40px;
+}
+
+.user-actions{
+    display: flex;
+    flex-direction: row;
+    align-items: center; /* Выравнивает элементы по вертикали */
+    justify-content: start; /* Равномерно распределяет элементы */
+    gap:40px;
 }
 
 @media (max-width: 1350px) {

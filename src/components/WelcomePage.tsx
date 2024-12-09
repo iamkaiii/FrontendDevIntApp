@@ -23,19 +23,18 @@ export const WelcomePage = () => {
     return (
         <>
             <div className="space">
-                <header>
+                <div className="header-welcome">
                     <Link to={ROUTES.START}>
                         <button className="home-button"></button>
                     </Link>
-                    <h1>Заказ питания на молочную кухню для детей</h1>
-                </header>
+                    <Link to={ROUTES.HOME} className="no-underline">
+                        <h2 className="h1-welcome">Продукты</h2>
+                    </Link>
+                </div>
                 <div className="container">
                     <p className="description">
                         {replaceNewlines(descriptionText)}
                     </p>
-                    <Link to={ROUTES.HOME}>
-                        <button className="to-home-button">Получить услугу</button>
-                    </Link>
                 </div>
             </div>
         </>

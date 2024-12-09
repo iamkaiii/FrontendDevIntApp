@@ -1,0 +1,59 @@
+.container-profile {
+    margin-left: 40px;
+}
+
+.change-password-form {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    gap: 20px;
+}
+
+.change-pass-h1{
+    color: #c22
+}
+
+.password-input {
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s;
+    width: 100%; /* Устанавливаем ширину на 100% от родительского контейнера */
+}
+
+.password-input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.change-password-button {
+    margin: 0px;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #c22;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    width: 108%; /* Кнопка занимает ту же ширину, что и поля ввода */
+}
+
+.change-password-button:hover {
+    background-color: rgb(174, 4, 4);
+    transform: scale(1.05);
+}
+
+.change-password-button:active {
+    background-color: rgb(174, 4, 4);
+    transform: scale(1);
+}
+
+.message {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #ff4d4f;
+}
