@@ -26,8 +26,9 @@ export const MainPage = () => {
 
     useEffect(() => {
         // Если фильтрованные продукты уже есть в Redux, их можно сразу отобразить
-        if (filteredProducts.length >= 0) {
+        if (filteredProducts.length >= 0 && productName != "") {
             setProducts(filteredProducts);
+            
         } else {
             // Если нет фильтрованных продуктов, загружаем все
             getAllProducts().then((result) => {
