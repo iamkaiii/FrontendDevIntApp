@@ -1,5 +1,5 @@
-import { getProductsByName, getAllProducts } from "../modules/ApiProducts";
-import { MilkProducts } from "../modules/MyInterface";
+import { getProductsByName, getAllProducts, getMilkRequestByID } from "../modules/ApiProducts";
+import { MilkProducts, MilkRequestResponse } from "../modules/MyInterface";
 import "./MainPage.css";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -17,52 +17,84 @@ export const MainPage = () => {
     // Извлекаем данные из Redux
     const { productName, filteredProducts } = useSelector((state: RootState) => state.search);
 
-    // Состояние для отображения продуктов
+    // Состояния для продуктов и MilkRequestID
     const [products, setProducts] = useState<MilkProducts[]>(filteredProducts || []);
-    
+    const [milkRequestID, setMilkRequestID] = useState<number>(0);
+    const [MealsInDraftCount, setMealsInDraftCount] = useState<number>(0);
     // Состояние кнопки вход/выход
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!localStorage.getItem("token"));
     const [login, setLogin] = useState<string>(localStorage.getItem("login") || "");
 
     useEffect(() => {
-        // Если фильтрованные продукты уже есть в Redux, их можно сразу отобразить
-        if (filteredProducts.length >= 0 && productName != "") {
-            setProducts(filteredProducts);
-            
-        } else {
-            // Если нет фильтрованных продуктов, загружаем все
-            getAllProducts().then((result) => {
-                setProducts(result.MilkProducts);
-            });
+        const fetchProducts = async () => {
+            try {
+                // Если есть фильтрованные продукты, показываем их
+                if (filteredProducts.length >= 0 && productName !== "") {
+                    setProducts(filteredProducts);
+                } else {
+                    // Если фильтрованных продуктов нет, загружаем все продукты
+                    const result = await getAllProducts();
+                    setProducts(result.MilkProducts);
+                    setMilkRequestID(result.MilkRequestID); // Устанавливаем MilkRequestID
+                    setMealsInDraftCount(result.MealsInDraftCount)
+
+                    console.log("result.MilkRequestID:", result.MilkRequestID);
+                    console.log("milkRequestID после установки:", result.MilkRequestID);
+                    console.log(result.MealsInDraftCount)
+                }
+            } catch (error) {
+                console.error("Ошибка при загрузке продуктов:", error);
+            }
+        };
+
+        fetchProducts(); 
+    }, [filteredProducts]); 
+
+    const checkAndUpdateMilkRequestID = async () => {
+        if (milkRequestID === 0) {
+            try {
+                const result = await getAllProducts(); // Или другой API для обновления milkRequestID
+                setMilkRequestID(result.MilkRequestID);
+                console.log("milkRequestID обновлен:", result.MilkRequestID);
+            } catch (error) {
+                console.error("Ошибка при обновлении milkRequestID:", error);
+            }
         }
-    }, [filteredProducts]);
+    };
+
+
+    
+
 
     const onSubmitFinderHandler = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    dispatch(setProductName(productName));
+        event.preventDefault();
+        dispatch(setProductName(productName));
 
-    if (productName) {
-        getProductsByName(productName).then((result) => {
-            const productsList = result.MilkProducts || [];
-            setProducts(productsList);
-            dispatch(setFilteredProducts(productsList));
-        }).catch(() => {
-            // Обработка ошибок в случае если API не вернул данных
-            setProducts([]);
-            dispatch(setFilteredProducts([]));
-        });
-    } else {
-        getAllProducts().then((result) => {
-            const allProducts = result.MilkProducts || [];
-            setProducts(allProducts);
-            dispatch(setFilteredProducts(allProducts));
-        }).catch(() => {
-            // Обработка ошибок в случае ошибки при получении всех продуктов
-            setProducts([]);
-            dispatch(setFilteredProducts([]));
-        });
-    }
-};
+        if (productName) {
+            getProductsByName(productName).then((result) => {
+                const productsList = result.MilkProducts || [];
+                setProducts(productsList);
+                dispatch(setFilteredProducts(productsList));
+            }).catch(() => {
+                setProducts([]);
+                dispatch(setFilteredProducts([]));
+            });
+        } else {
+            getAllProducts().then((result) => {
+                const allProducts = result.MilkProducts || [];
+                setProducts(allProducts);
+                setMilkRequestID(result.MilkRequestID); // Сохраняем MilkRequestID
+                dispatch(setFilteredProducts(allProducts));
+            }).catch(() => {
+                setProducts([]);
+                setMilkRequestID(0); // Устанавливаем в 0 в случае ошибки
+                dispatch(setFilteredProducts([]));
+            });
+        }
+    };
+
+
+
 
     const imageClickHandler = (id: number) => {
         navigate(`${ROUTES.HOME}/${id}`);
@@ -70,20 +102,23 @@ export const MainPage = () => {
 
     const handleAuthButtonClick = () => {
         if (isAuthenticated) {
-            // Если пользователь авторизован, очищаем токен и логин
             localStorage.removeItem("token");
             localStorage.removeItem("login");
             setIsAuthenticated(false);
             setLogin("");
         } else {
-            // Если пользователь не авторизован, переходим на страницу авторизации
             navigate(ROUTES.AUTHORIZATION);
         }
     };
 
     const handleProfileClick = () => {
-        // Переходим на страницу профиля пользователя
         navigate(ROUTES.PROFILE);
+    };
+
+    const handleCartButtonClick = () => {
+        if (milkRequestID !== 0) {
+            navigate(`${ROUTES.BASKET}/${milkRequestID}`);
+        }
     };
 
     return (
@@ -137,7 +172,14 @@ export const MainPage = () => {
                         onChange={(e) => dispatch(setProductName(e.target.value))}
                     />
                     <button className="button-def" type="submit">Поиск</button>
-                    <button className="button-def" type="submit">Корзина</button>
+                    <button 
+                        className="button-def"
+                        type="button"
+                        disabled={milkRequestID === 0} // Деактивация кнопки
+                        onClick={handleCartButtonClick} // Обработчик клика
+                    >
+                        Корзина
+                    </button>
                 </form>
             </div>
 
@@ -147,6 +189,7 @@ export const MainPage = () => {
                         product={product}
                         key={product.id}
                         imageClickHandler={() => imageClickHandler(product.id)}
+                        checkAndUpdateMilkRequestID={checkAndUpdateMilkRequestID}
                     />
                 ))}
             </div>

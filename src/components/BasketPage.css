@@ -1,0 +1,153 @@
+.container-basket {
+    display: flex;
+    justify-content: space-between; /* Разделяем контент на две колонки */
+    margin: 20px auto;
+    max-width: 1200px; /* Ограничиваем ширину контейнера */
+}
+
+.basket-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex: 2; /* Основной контент занимает больше места */
+}
+
+.basket-summary {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 16px;
+    padding: 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    flex: 1; /* Блок справа занимает меньше места */
+    margin-left: 20px;
+}
+
+.basket-summary p {
+    margin: 8px 0;
+    font-size: 16px;
+    color: #555;
+}
+
+.basket-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* Разделяем кнопки вертикально */
+    margin-top: 16px;
+}
+
+.action-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border: 2px solid #c22;
+    border-radius: 10px;
+    background-color: transparent;
+    color: #c22;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.action-btn:hover {
+    background-color: rgba(194, 34, 34, 0.1);
+}
+
+.confirm-btn {
+    border-color: #28a745;
+    color: #28a745;
+}
+
+.confirm-btn:hover {
+    background-color: rgba(40, 167, 69, 0.1);
+}
+
+.delete-btn {
+    border-color: #dc3545;
+    color: #dc3545;
+}
+
+.delete-btn:hover {
+    background-color: rgba(220, 53, 69, 0.1);
+}
+
+.basket-card {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    position: relative;
+}
+
+.basket-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-right: 16px;
+}
+
+.basket-info {
+    flex-grow: 1;
+}
+
+.basket-info h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+}
+
+.basket-info p {
+    margin: 8px 0 16px;
+    font-size: 14px;
+    color: #555;
+}
+
+.delete-product-btn {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    padding: 5px 10px;
+    background-color: #dc3545;
+    color: white;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.delete-product-btn:hover {
+    background-color: #c22;
+}
+
+.quantity-btn {
+    width: 40px;
+    height: 40px;
+    border: 2px solid #c22;
+    border-radius: 10px;
+    background-color: transparent;
+    color: #c22;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.quantity-btn:hover {
+    background-color: rgba(194, 34, 34, 0.1);
+}
+
+.quantity-btn:disabled {
+    border-color: #ddd;
+    color: #ddd;
+    cursor: not-allowed;
+    background-color: transparent;
+}

@@ -1,4 +1,4 @@
-import { ApiResponse } from "./MyInterface";
+import { ApiResponse} from "./MyInterface";
 
 
 export const MOCK_DATA_PRODUCTS : ApiResponse = {

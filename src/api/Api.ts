@@ -76,8 +76,13 @@ export interface SchemasDeleteMealResponse {
   messageResponse?: string;
 }
 
+export interface SchemasFinishMilkRequestRequest {
+  id?: string;
+}
+
 export interface SchemasGetAllMealsResponse {
   count?: number;
+  count_meals_in_draft_request?: number;
   meals?: DsMeals[];
   milk_req_ID?: number;
 }
@@ -88,6 +93,12 @@ export interface SchemasGetAllMilkRequestsWithParamsResponse {
 
 export interface SchemasGetMealResponse {
   meal?: DsMeals;
+}
+
+export interface SchemasGetMilkRequestResponse {
+  count?: number;
+  milk_request_meals?: DsMeals[];
+  milk_requests?: DsMilkRequests;
 }
 
 export interface SchemasLoginUserRequest {
@@ -497,6 +508,97 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/api/milk_req_meals/${id}`,
         method: "PUT",
         body: body,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Удаляет заявку на молочную кухню по её ID
+     *
+     * @tags milk_requests
+     * @name MilkRequestDelete
+     * @summary Удалить заявку на молочную кухню
+     * @request DELETE:/api/milk_request/{ID}
+     * @secure
+     */
+    milkRequestDelete: (
+      id: number,
+      query?: {
+        id?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<string, SchemasResponseMessage>({
+        path: `/api/milk_request/${id}`,
+        method: "DELETE",
+        query: query,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Получить данные заявки на молочную кухню по её ID, включая список связанных блюд
+     *
+     * @tags milk_requests
+     * @name MilkRequestDetail
+     * @summary Получить данные заявки на молочную кухню
+     * @request GET:/api/milk_request/{ID}
+     * @secure
+     */
+    milkRequestDetail: (id: number, params: RequestParams = {}) =>
+      this.request<SchemasGetMilkRequestResponse, SchemasResponseMessage>({
+        path: `/api/milk_request/${id}`,
+        method: "GET",
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Завершаем заявку на молочную кухню по переданному ID и параметрам в теле запроса (статус и дата доставки)
+     *
+     * @tags milk_requests
+     * @name MilkRequestFinishUpdate
+     * @summary Завершить заявку на молочную кухню
+     * @request PUT:/api/milk_request/finish/{ID}
+     * @secure
+     */
+    milkRequestFinishUpdate: (id: number, requestBody: SchemasFinishMilkRequestRequest, params: RequestParams = {}) =>
+      this.request<string, SchemasResponseMessage>({
+        path: `/api/milk_request/finish/${id}`,
+        method: "PUT",
+        body: requestBody,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Формирует заявку на молочную кухню по переданному ID и параметрам запроса
+     *
+     * @tags milk_requests
+     * @name MilkRequestFormUpdate
+     * @summary Создать заявку на молочную кухню
+     * @request PUT:/api/milk_request/form/{ID}
+     * @secure
+     */
+    milkRequestFormUpdate: (
+      id: number,
+      query?: {
+        id?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<string, SchemasResponseMessage>({
+        path: `/api/milk_request/form/${id}`,
+        method: "PUT",
+        query: query,
+        secure: true,
         type: ContentType.Json,
         format: "json",
         ...params,

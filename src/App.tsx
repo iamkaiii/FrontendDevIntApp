@@ -6,6 +6,7 @@ import { MealPage } from "./components/MealPage";
 import { RegisterPage } from "./components/RegisterPage";
 import { AuthPage } from "./components/AuthPage";
 import { ProfilePage } from "./components/ProfilePage";
+import { BasketPage } from "./components/BasketPage"
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
       <Route path={`${ROUTES.REGISTER}`} element={<RegisterPage />} />
       <Route path={`${ROUTES.AUTHORIZATION}`} element={<AuthPage />} />
       <Route path={`${ROUTES.PROFILE}`} element={<ProfilePage />} />
+      <Route path={`${ROUTES.BASKET}/:id`} element={<BasketPage />} />
     </Routes>
   </BrowserRouter>
   );  

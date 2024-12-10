@@ -106,9 +106,16 @@ definitions:
       messageResponse:
         type: string
     type: object
+  schemas.FinishMilkRequestRequest:
+    properties:
+      id:
+        type: string
+    type: object
   schemas.GetAllMealsResponse:
     properties:
       count:
+        type: integer
+      count_meals_in_draft_request:
         type: integer
       meals:
         items:
@@ -128,6 +135,17 @@ definitions:
     properties:
       meal:
         $ref: '#/definitions/ds.Meals'
+    type: object
+  schemas.GetMilkRequestResponse:
+    properties:
+      count:
+        type: integer
+      milk_request_meals:
+        items:
+          $ref: '#/definitions/ds.Meals'
+        type: array
+      milk_requests:
+        $ref: '#/definitions/ds.MilkRequests'
     type: object
   schemas.LoginUserRequest:
     properties:
@@ -559,6 +577,144 @@ paths:
       summary: Обновить количество продуктов в заявке
       tags:
       - meals_and_requests
+  /api/milk_request/{ID}:
+    delete:
+      consumes:
+      - application/json
+      description: Удаляет заявку на молочную кухню по её ID
+      parameters:
+      - description: ID заявки
+        in: path
+        name: ID
+        required: true
+        type: integer
+      - in: query
+        name: id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: MilkRequest was deleted"  // Сообщение об успешном удалении
+          schema:
+            type: string
+        "400":
+          description: Неверный ID"  // Ошибка при неверном ID
+          schema:
+            $ref: '#/definitions/schemas.ResponseMessage'
+        "500":
+          description: Ошибка сервера"  // Ошибка сервера при удалении заявки
+          schema:
+            $ref: '#/definitions/schemas.ResponseMessage'
+      security:
+      - BearerAuth  // Требуется аутентификация: []
+      summary: Удалить заявку на молочную кухню
+      tags:
+      - milk_requests
+    get:
+      consumes:
+      - application/json
+      description: Получить данные заявки на молочную кухню по её ID, включая список
+        связанных блюд
+      parameters:
+      - description: ID заявки
+        in: path
+        name: ID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schemas.GetMilkRequestResponse'
+        "400":
+          description: Неверный ID
+          schema:
+            $ref: '#/definitions/schemas.ResponseMessage'
+        "500":
+          description: Ошибка сервера
+          schema:
+            $ref: '#/definitions/schemas.ResponseMessage'
+      security:
+      - BearerAuth: []
+      summary: Получить данные заявки на молочную кухню
+      tags:
+      - milk_requests
+  /api/milk_request/finish/{ID}:
+    put:
+      consumes:
+      - application/json
+      description: Завершаем заявку на молочную кухню по переданному ID и параметрам
+        в теле запроса (статус и дата доставки)
+      parameters:
+      - description: ID заявки
+        in: path
+        name: ID
+        required: true
+        type: integer
+      - description: Данные для завершения заявки
+        in: body
+        name: requestBody
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.FinishMilkRequestRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Milk Request was Finished
+          schema:
+            type: string
+        "400":
+          description: Ошибка в параметрах запроса
+          schema:
+            $ref: '#/definitions/schemas.ResponseMessage'
+        "500":
+          description: Ошибка сервера
+          schema:
+            $ref: '#/definitions/schemas.ResponseMessage'
+      security:
+      - BearerAuth: []
+      summary: Завершить заявку на молочную кухню
+      tags:
+      - milk_requests
+  /api/milk_request/form/{ID}:
+    put:
+      consumes:
+      - application/json
+      description: Формирует заявку на молочную кухню по переданному ID и параметрам
+        запроса
+      parameters:
+      - description: ID заявки
+        in: path
+        name: ID
+        required: true
+        type: integer
+      - in: query
+        name: id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Milk Request was Formed
+          schema:
+            type: string
+        "400":
+          description: Ошибка в параметрах запроса
+          schema:
+            $ref: '#/definitions/schemas.ResponseMessage'
+        "500":
+          description: Ошибка сервера
+          schema:
+            $ref: '#/definitions/schemas.ResponseMessage'
+      security:
+      - BearerAuth: []
+      summary: Создать заявку на молочную кухню
+      tags:
+      - milk_requests
   /api/milk_requests:
     get:
       consumes:
