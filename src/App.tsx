@@ -7,6 +7,7 @@ import { RegisterPage } from "./components/RegisterPage";
 import { AuthPage } from "./components/AuthPage";
 import { ProfilePage } from "./components/ProfilePage";
 import { BasketPage } from "./components/BasketPage"
+import { AllRequestPage } from "./components/AllRequestsPage";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
       <Route path={`${ROUTES.AUTHORIZATION}`} element={<AuthPage />} />
       <Route path={`${ROUTES.PROFILE}`} element={<ProfilePage />} />
       <Route path={`${ROUTES.BASKET}/:id`} element={<BasketPage />} />
+      <Route path={`${ROUTES.REQUESTS}`} element={<AllRequestPage/>} />
     </Routes>
   </BrowserRouter>
   );  

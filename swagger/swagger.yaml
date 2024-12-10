@@ -720,16 +720,13 @@ paths:
       consumes:
       - application/json
       description: Получить список запросов на молоко с возможностью фильтрации по
-        статусу и датам
+        статусу и пользователю
       parameters:
       - description: Статус заявки
         in: query
         name: status
-        type: string
-      - description: Наличие статуса
-        in: query
-        name: is_status
-        type: string
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -738,11 +735,11 @@ paths:
           schema:
             $ref: '#/definitions/schemas.GetAllMilkRequestsWithParamsResponse'
         "400":
-          description: Bad Request
+          description: Неверный запрос, отсутствует параметр status или он некорректен
           schema:
             $ref: '#/definitions/schemas.ResponseMessage'
         "500":
-          description: Internal Server Error
+          description: Ошибка сервера
           schema:
             $ref: '#/definitions/schemas.ResponseMessage'
       security:

@@ -1,21 +1,15 @@
-import { FC } from "react"
-import "./HeaderUni.css"
-import { getProductsByName, getAllProducts } from "../modules/ApiProducts";
-import { MilkProducts } from "../modules/MyInterface";
+import { FC } from "react";
+import "./HeaderUni.css";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ROUTE_LABELS, ROUTES } from "../modules/Routes";
-import { useDispatch, useSelector } from "react-redux";
-
-
+import { ROUTES } from "../modules/Routes";
 
 export const HeaderUni: FC = () => {
-    const dispatch = useDispatch();
     const navigate = useNavigate();
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!localStorage.getItem("token"));
     const [login, setLogin] = useState<string>(localStorage.getItem("login") || "");
 
-
+    // Обработчик для кнопки входа/выхода
     const handleAuthButtonClick = () => {
         if (isAuthenticated) {
             localStorage.removeItem("token");
@@ -28,12 +22,12 @@ export const HeaderUni: FC = () => {
         }
     };
 
+    // Обработчик для кнопки профиля
     const handleProfileClick = () => {
         navigate(ROUTES.PROFILE);
     };
-    return(
 
-
+    return (
         <>
             <div className="super-header-main">
                 <Link to={ROUTES.START}>
@@ -42,6 +36,15 @@ export const HeaderUni: FC = () => {
                 <Link to={ROUTES.HOME} className="no-underline">
                     <button className="profile-button">Продукты</button>
                 </Link>
+
+                {/* Кнопка "Мои заявки" отображается только если пользователь авторизован */}
+                {isAuthenticated && (
+                    <Link to={ROUTES.REQUESTS} className="no-underline">
+                        <button className="profile-button">Мои заявки</button>
+                    </Link>
+                )}
+
+                {/* Кнопки профиля и выхода */}
                 {isAuthenticated ? (
                     <div className="user-actions">
                         <button
@@ -66,9 +69,6 @@ export const HeaderUni: FC = () => {
                     </button>
                 )}
             </div>
-        
-    
-
         </>
-    )
-}
+    );
+};

@@ -605,7 +605,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
-     * @description Получить список запросов на молоко с возможностью фильтрации по статусу и датам
+     * @description Получить список запросов на молоко с возможностью фильтрации по статусу и пользователю
      *
      * @tags milk_requests
      * @name MilkRequestsList
@@ -614,11 +614,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     milkRequestsList: (
-      query?: {
+      query: {
         /** Статус заявки */
-        status?: string;
-        /** Наличие статуса */
-        is_status?: string;
+        status: number;
       },
       params: RequestParams = {},
     ) =>

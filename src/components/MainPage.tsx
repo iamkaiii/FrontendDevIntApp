@@ -9,6 +9,7 @@ import { BreadCrumbs } from "../components/BreadCrumbs";
 import { useDispatch, useSelector } from "react-redux";
 import { setProductName, setFilteredProducts } from "../modules/searchSlice";
 import { RootState } from "../modules/store";
+import { HeaderUni } from "./HeaderUni";
 
 export const MainPage = () => {
     const dispatch = useDispatch();
@@ -100,20 +101,7 @@ export const MainPage = () => {
         navigate(`${ROUTES.HOME}/${id}`);
     };
 
-    const handleAuthButtonClick = () => {
-        if (isAuthenticated) {
-            localStorage.removeItem("token");
-            localStorage.removeItem("login");
-            setIsAuthenticated(false);
-            setLogin("");
-        } else {
-            navigate(ROUTES.AUTHORIZATION);
-        }
-    };
-
-    const handleProfileClick = () => {
-        navigate(ROUTES.PROFILE);
-    };
+    
 
     const handleCartButtonClick = () => {
         if (milkRequestID !== 0) {
@@ -123,36 +111,8 @@ export const MainPage = () => {
 
     return (
         <>
-            <div className="super-header-main">
-                <Link to={ROUTES.START}>
-                    <button className="home-button"></button>
-                </Link>
-                <Link to={ROUTES.HOME} className="no-underline">
-                    <button className="profile-button">Продукты</button>
-                </Link>
-                {isAuthenticated ? (
-                    <div className="user-actions">
-                        <button
-                            className="profile-button"
-                            onClick={handleProfileClick}
-                        >
-                            {login}
-                        </button>
-                        <button
-                            className="auth-button"
-                            onClick={handleAuthButtonClick}
-                        >
-                            Выход
-                        </button>
-                    </div>
-                ) : (
-                    <button
-                        className="auth-button"
-                        onClick={handleAuthButtonClick}
-                    >
-                        Вход
-                    </button>
-                )}
+            <div className="header-backet">
+                <HeaderUni />
             </div>
 
             <div className="crumbs">
