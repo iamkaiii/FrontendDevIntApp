@@ -1,8 +1,8 @@
-import { getProductsByName, getAllProducts, getMilkRequestByID } from "../modules/ApiProducts";
-import { MilkProducts, MilkRequestResponse } from "../modules/MyInterface";
+import { getProductsByName, getAllProducts } from "../modules/ApiProducts";
+import { MilkProducts } from "../modules/MyInterface";
 import "./MainPage.css";
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ROUTE_LABELS, ROUTES } from "../modules/Routes";
 import { OneProduct } from "../components/OneMeal";
 import { BreadCrumbs } from "../components/BreadCrumbs";
@@ -38,6 +38,7 @@ export const MainPage = () => {
                     setProducts(result.MilkProducts);
                     setMilkRequestID(result.MilkRequestID); // Устанавливаем MilkRequestID
                     setMealsInDraftCount(result.MealsInDraftCount)
+                    console.log(MealsInDraftCount, isAuthenticated, login, setLogin(login), setIsAuthenticated(isAuthenticated))
 
                     console.log("result.MilkRequestID:", result.MilkRequestID);
                     console.log("milkRequestID после установки:", result.MilkRequestID);

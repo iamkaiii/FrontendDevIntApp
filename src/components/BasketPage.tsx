@@ -158,7 +158,7 @@ export const BasketPage: FC = () => {
                 </div>
                 <div className="basket-summary">
                     <p><strong>Дата доставки:</strong> {calculateDeliveryDate() || "Не указана"}</p>
-                    <p><strong>Адрес:</strong> {basketData?.MilkRequest.address || "Не указан"}</p>
+                    <p><strong>Адрес:</strong> {basketData?.MilkRequest.address || "Таможенный проезд, д. 10"}</p>
                     <div className="basket-actions">
                         <button onClick={handleConfirm} className="action-btn confirm-btn">Оформить заявку</button>
                         <button onClick={handleDeleteBasket} className="action-btn delete-btn">Удалить заявку</button>

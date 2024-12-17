@@ -5,7 +5,7 @@ export interface MilkProducts {
     meal_weight : string
     meal_brand: string
     meal_detail: string
-    image_url ?: string
+    image_url : string
     status : boolean
 
 }
@@ -37,10 +37,10 @@ export interface MilkRequest {
     date_update: string;
     date_finish: string;
     creator_id: number;
-    moderator_id?: number | null;
-    recipient_name?: string;
-    recipient_surname?: string;
-    address?: string;
+    moderator_id: number | null;
+    recipient_name: string;
+    recipient_surname: string;
+    address: string;
     delivery_date: string;
     Creator: User;
     Moderator: User;

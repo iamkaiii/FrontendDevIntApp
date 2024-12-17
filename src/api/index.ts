@@ -1,6 +1,6 @@
 import { Api } from './Api';
 
 export const api = new Api({
-    baseURL: '/',
+    baseURL: 'http://localhost:8001/',
     withCredentials: true,
 });

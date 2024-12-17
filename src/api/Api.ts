@@ -10,36 +10,36 @@
  */
 
 export interface DsMeals {
-  id?: number;
-  image_url?: string;
-  meal_brand?: string;
-  meal_detail?: string;
-  meal_info?: string;
-  meal_weight?: string;
-  status?: boolean;
+  id: number;
+  image_url: string;
+  meal_brand: string;
+  meal_detail: string;
+  meal_info: string;
+  meal_weight: string;
+  status: boolean;
 }
 
 export interface DsMilkRequests {
-  address?: string;
-  creator?: DsUsers;
-  creator_id?: number;
-  date_create?: string;
-  date_finish?: string;
-  date_update?: string;
-  delivery_date?: string;
-  id?: number;
-  moderator?: DsUsers;
-  moderator_id?: number;
-  recipient_name?: string;
-  recipient_surname?: string;
-  status?: number;
+  address: string;
+  creator: DsUsers;
+  creator_id: number;
+  date_create: string;
+  date_finish: string;
+  date_update: string;
+  delivery_date: string;
+  id: number;
+  moderator: DsUsers;
+  moderator_id: number;
+  recipient_name: string;
+  recipient_surname: string;
+  status: number;
 }
 
 export interface DsUsers {
-  id?: number;
-  is_moderator?: boolean;
-  login?: string;
-  password?: string;
+  id: number;
+  is_moderator: boolean;
+  login: string;
+  password: string;
 }
 
 export interface SchemasAddMealToMilkReqResponse {
@@ -88,7 +88,7 @@ export interface SchemasGetAllMealsResponse {
 }
 
 export interface SchemasGetAllMilkRequestsWithParamsResponse {
-  milkRequests?: DsMilkRequests[];
+  MilkRequests?: DsMilkRequests[];
 }
 
 export interface SchemasGetMealResponse {
@@ -96,9 +96,9 @@ export interface SchemasGetMealResponse {
 }
 
 export interface SchemasGetMilkRequestResponse {
-  count?: number;
-  milk_request_meals?: DsMeals[];
-  milk_requests?: DsMilkRequests;
+  count: number;
+  milk_request_meals: DsMeals[];
+  milk_requests: DsMilkRequests;
 }
 
 export interface SchemasLoginUserRequest {
@@ -181,7 +181,7 @@ export class HttpClient<SecurityDataType = unknown> {
   private format?: ResponseType;
 
   constructor({ securityWorker, secure, format, ...axiosConfig }: ApiConfig<SecurityDataType> = {}) {
-    this.instance = axios.create({ ...axiosConfig, baseURL: axiosConfig.baseURL || "" });
+    this.instance = axios.create({ ...axiosConfig, baseURL: axiosConfig.baseURL || "//localhost:8001" });
     this.secure = secure;
     this.format = format;
     this.securityWorker = securityWorker;
@@ -271,8 +271,12 @@ export class HttpClient<SecurityDataType = unknown> {
 }
 
 /**
- * @title No title
+ * @title DevIntApp
+ * @version 1.1
+ * @baseUrl //localhost:8001
  * @contact
+ *
+ * This is API for Milk Kitchen requests
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
   api = {

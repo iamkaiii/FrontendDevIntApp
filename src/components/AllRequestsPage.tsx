@@ -1,18 +1,16 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ROUTES } from "../modules/Routes";
 import { BreadCrumbs } from "../components/BreadCrumbs";
 import { api } from "../api";  // Путь к сгенерированному Api
 import { HeaderUni } from "./HeaderUni";
 import "./AllRequestPage.css"; // Подключение стилей
-import { MilkRequest } from "../modules/MyInterface";
 import { DsMilkRequests } from "../api/Api";
 
 export const AllRequestPage = () => {
     const [requests, setRequests] = useState<DsMilkRequests[]>([]); // Стейт для хранения списка заявок
     const [loading, setLoading] = useState<boolean>(true); // Стейт для загрузки
     const [error, setError] = useState<string | null>(null); // Стейт для ошибки
-    const navigate = useNavigate();
 
     // Получаем токен из localStorage
     const token = localStorage.getItem('token');

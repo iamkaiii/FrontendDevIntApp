@@ -86,6 +86,8 @@ button{
 }
 
 
+
+
 .to-home-button{
     margin: 20px;
     border-radius: 20px;
@@ -100,6 +102,45 @@ button{
     background-color: #fff0f0;
 }
 
+
+.carousel-image {
+    width: 100%;
+    height: 400px; /* Фиксированная высота изображения */
+    object-fit: cover; /* Сохраняет пропорции и обрезает изображение по размеру */
+    flex-shrink: 0; /* Запрещает уменьшение изображения */
+    transition: none; /* Отключаем анимации масштабирования */
+    width: 1300px;
+    border-radius: 20px; /* Закругление углов */
+    
+}
+
+.carousel-item {
+    
+    transition: transform 0.6s ease-in-out; /* Только анимация перемещения, без масштабирования */
+    backface-visibility: hidden; /* Убираем возможное мигание */
+    backface-visibility: hidden; /* Убираем мигание при скрытии */
+}
+
+.carousel-inner {
+    overflow: hidden; /* Скрываем лишние части изображений */
+}
+
+/* Исправление для изображений при перелистывании */
+.carousel-item-next,
+.carousel-item-prev,
+.carousel-item.active {
+    display: block; /* Гарантируем, что только активные элементы видны */
+}
+
+.carousel-caption {
+    color: black; /* Устанавливаем черный цвет текста */
+    background: rgba(255, 255, 255, 0.8); /* Полупрозрачный белый фон для текста */
+    padding: 10px; 
+    bottom: 20px;
+    border-radius: 20px;
+    text-align: center; 
+    font-size: 1.2em;
+}
 
 @media (max-width: 470px) {
 

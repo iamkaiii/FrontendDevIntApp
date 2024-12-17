@@ -1,11 +1,13 @@
-import { MilkProducts, ApiResponse, ApiResponseGetAllProds, MilkRequestResponse, MilkRequest, User } from "./MyInterface";
+import { MilkProducts, ApiResponse, ApiResponseGetAllProds, MilkRequestResponse, MilkRequest } from "./MyInterface";
 import { MOCK_DATA_PRODUCTS } from "./MockDataProducts";
 import { api } from "../api";
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { DsMilkRequests, SchemasChangePassword, SchemasResponseMessage } from "../api/Api";
 
 export const getProductsByName = async (name: string): Promise<ApiResponse> => {
     try {
 
-        const response = await fetch(`/api/secret/get_meal_by_meal_info/${name}`);
+        const response = await fetch(`http://localhost:8001/api/secret/get_meal_by_meal_info/${name}`);
         const info = await response.json();
         console.log(info);
         return { MilkProducts: info["meals"]};
@@ -28,7 +30,7 @@ export const getProductByID = async (
     id: string | number
 ): Promise<MilkProducts> => {
     try {
-        const response = await fetch(`/api/meal/${id}`);
+        const response = await fetch(`http://localhost:8001/api/meal/${id}`);
         const info = await response.json();
         console.log(info);
         return info["meal"];
@@ -49,7 +51,7 @@ export const getAllProducts = async (): Promise<ApiResponseGetAllProds> => {
             ? { Authorization: `Bearer ${token}` }
             : {};
 
-        const response = await fetch(`/api/meals`, {
+        const response = await fetch(`http://localhost:8001/api/meals`, {
             method: "GET",
             headers, // Передаем заголовки
         });
@@ -64,6 +66,13 @@ export const getAllProducts = async (): Promise<ApiResponseGetAllProds> => {
     }
 };
 
+// Адаптер для преобразования DsMilkRequests в MilkRequest
+const adaptMilkRequest = (dsMilkRequest: DsMilkRequests): MilkRequest => ({
+    ...dsMilkRequest,
+    Creator: dsMilkRequest.creator,       // Преобразование поля creator в Creator
+    Moderator: dsMilkRequest.moderator, // Преобразование поля moderator в Moderatorts
+});
+
 export const getMilkRequestByID = async (id: number): Promise<MilkRequestResponse | null> => {
     const token = localStorage.getItem("token"); // Получение токена из localStorage
     if (!token) {
@@ -72,14 +81,20 @@ export const getMilkRequestByID = async (id: number): Promise<MilkRequestRespons
     }
 
     try {
+        // Выполнение запроса к API
         const response = await api.api.milkRequestDetail(id, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         });
 
+        // Проверка наличия данных в ответе
         if (response.data) {
-            return {MilkRequest: response.data["milk_requests"], count: response.data["count"], MilkRequesMeals: response.data["milk_request_meals"]}; // Возвращаем успешный ответ
+            return {
+                MilkRequest: adaptMilkRequest(response.data["milk_requests"]), // Адаптация данных
+                count: response.data["count"],
+                MilkRequesMeals: response.data["milk_request_meals"],
+            };
         } else {
             console.error("Данные отсутствуют в ответе.");
             return null;
@@ -94,3 +109,81 @@ export const getMilkRequestByID = async (id: number): Promise<MilkRequestRespons
         return null;
     }
 };
+
+export const getProductByIdd= createAsyncThunk<MilkProducts | null, string | number>(
+    'products/getByID',
+    async (id) => {
+        try {
+            const response = await fetch(`/api/meal/${id}`);    
+            const info = await response.json();
+            console.log(info);
+            return info["meal"];
+        } catch (error) {
+            console.error("Ошибка при получении продукта по ID, используем MOCK_DATA_PRODUCTS", error);
+            const productIndex = Number(id) - 1;
+            return MOCK_DATA_PRODUCTS.MilkProducts[productIndex] || null;
+        }
+    }
+);
+
+
+export const registerUserThunk = createAsyncThunk<
+    SchemasResponseMessage,           
+        { login: string; password: string }, 
+        { rejectValue: string }         
+>(
+  'auth/registerUser',
+  async ({ login, password }, { rejectWithValue }) => {
+    try {
+      // Запрос к API для регистрации пользователя
+      const response = await api.api.registerUserCreate({ login, password });
+      const data = response.data as SchemasResponseMessage;
+
+      return data; // Возвращаем данные ответа
+    } catch (err: any) {
+      if (err.response?.status === 500 && err.response?.data?.message) {
+        return rejectWithValue(err.response.data.message); // Ошибка 500
+      } else if (err.response?.data?.error) {
+        return rejectWithValue(err.response.data.error); // Другие ошибки
+      } else {
+        return rejectWithValue("Произошла ошибка. Попробуйте снова."); // Общая ошибка
+      }
+    }
+  }
+);
+
+
+export const changePasswordThunk = createAsyncThunk<
+  string, 
+  SchemasChangePassword, 
+  { rejectValue: string } 
+>(
+  'auth/changePassword',
+  async ({ new_password, old_password }, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token'); 
+      if (!token) {
+        return rejectWithValue('Ошибка авторизации. Токен отсутствует.');
+      }
+
+      
+      const response = await api.api.changeUserInfoUpdate(
+        { old_password: old_password, new_password: new_password },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      
+      if (response.data) {
+        return 'Пароль успешно изменен.'; 
+      } else {
+        return rejectWithValue('Неожиданный ответ от сервера.');
+      }
+    } catch (err: any) {
+      if (err.response?.data?.message) {
+        return rejectWithValue(err.response.data.message); 
+      } else {
+        return rejectWithValue('Произошла ошибка при смене пароля.');
+      }
+    }
+  }
+);

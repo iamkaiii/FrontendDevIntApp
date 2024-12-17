@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ROUTES } from "../modules/Routes";
 import { api } from '../api';  // Путь к сгенерированному Api
 import "./RegisterPage.css";
@@ -12,7 +12,6 @@ export const RegisterPage: FC = () => {
     const [login, setLogin] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [message, setMessage] = useState<string | null>(null); // Для сообщения от сервера
-    const navigate = useNavigate();
 
     const handleAuth = async () => {
         try {

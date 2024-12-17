@@ -11,7 +11,7 @@ import { AllRequestPage } from "./components/AllRequestsPage";
 
 function App() {
   return (
-    <BrowserRouter basename="/FrontendDevIntApp">
+    <BrowserRouter basename="/">
     <Routes>
       <Route path={ROUTES.START} index element={<WelcomePage />} />
       <Route path={ROUTES.HOME} index element={<MainPage />} />

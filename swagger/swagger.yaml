@@ -1,3 +1,4 @@
+basePath: /
 definitions:
   ds.Meals:
     properties:
@@ -197,8 +198,12 @@ definitions:
       messageResponse:
         type: string
     type: object
+host: localhost:8001
 info:
   contact: {}
+  description: This is API for Milk Kitchen requests
+  title: DevIntApp
+  version: "1.1"
 paths:
   /api/change_user_info:
     put:
@@ -781,4 +786,9 @@ paths:
       summary: Register a new user
       tags:
       - users
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

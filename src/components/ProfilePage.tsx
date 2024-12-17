@@ -1,7 +1,6 @@
 import "./ProfilePage.css";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { ROUTES } from "../modules/Routes";
+import {  } from "../modules/Routes";
 import { api } from "../api"; // Импорт API
 import { HeaderUni } from "./HeaderUni";
 
@@ -11,8 +10,7 @@ export const ProfilePage = () => {
     const [oldPassword, setOldPassword] = useState<string>("");
     const [newPassword, setNewPassword] = useState<string>("");
     const [message, setMessage] = useState<string>("");
-
-    const navigate = useNavigate();
+    console.log(isAuthenticated, setIsAuthenticated, login, setLogin)
 
     // Проверка авторизации
     const token = localStorage.getItem("token");
@@ -31,6 +29,8 @@ export const ProfilePage = () => {
             </div>
         );
     }
+
+    
 
 
 
