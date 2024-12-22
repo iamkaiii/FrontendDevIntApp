@@ -2,7 +2,8 @@ import "./WelcomePage.css";
 import { ROUTES } from "../modules/Routes";
 import { Link } from "react-router-dom";
 import { Container, Row, Carousel, CarouselItem, CarouselControl, CarouselIndicators, CarouselCaption } from "reactstrap";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { HeaderUni } from "./HeaderUni";
 
 // Функция для замены \n на <br />
 const replaceNewlines = (text: string) => {
@@ -19,13 +20,13 @@ const items = [
     {
         src: "http://127.0.0.1:9000/bmstulab/ekaterina.png",
         altText: "Молочная кухня",
-        caption: "Мера соцподдержки по обеспечению специальным питанием семей с детьми",
+        caption: "Пользоваться молочной кухней в Москве могут только люди с московской пропиской",
         fallbackSrc: "/carousel1.jpg"
     },
     {
         src: "http://127.0.0.1:9000/bmstulab/mgtu.png",
         altText: "Молочная кухня",
-        caption: "Пользоваться молочной кухней в Москве могут только люди с московской пропиской",
+        caption: "Мера соцподдержки по обеспечению специальным питанием семей с детьми",
         fallbackSrc: "/carousel2.jpg"
     },
     {
@@ -66,12 +67,14 @@ export const WelcomePage = () => {
 
     const slides = items.map((item) => {
         const [imageSrc, setImageSrc] = useState(item.fallbackSrc);
-
+        const itemRef = useRef(null); // Добавляем реф для CarouselItem
+    
         return (
             <CarouselItem
                 onExiting={() => setAnimating(true)}
                 onExited={() => setAnimating(false)}
                 key={item.src}
+                innerRef={itemRef} // Используем innerRef вместо findDOMNode
             >
                 <img
                     src={imageSrc}
@@ -92,12 +95,7 @@ export const WelcomePage = () => {
         <>
             <div className="space">
                 <div className="header-welcome">
-                    <Link to={ROUTES.START}>
-                        <button className="home-button"></button>
-                    </Link>
-                    <Link to={ROUTES.HOME} className="no-underline">
-                        <h2 className="h1-welcome">Продукты</h2>
-                    </Link>
+                    <HeaderUni />
                 </div>
 
                 <Container>

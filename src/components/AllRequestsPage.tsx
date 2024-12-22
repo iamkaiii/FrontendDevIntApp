@@ -61,14 +61,29 @@ export const AllRequestPage = () => {
         return <div className="error-message">{error}</div>;
     }
 
+    const statusToText = (status: number): string => {
+        switch (status) {
+            case 0:
+                return "Черновик";
+            case 1:
+                return "Сформирована";
+            case 2:
+                return "Завершена";
+            case 3:
+                return "Удалена";
+            case 4:
+                return "Отклонена";
+            default:
+                return "Отклонена";
+        }
+    };
+
     return (
         <div className="all-requests-page">
             
             <div className="header-backet">
                 <HeaderUni />
             </div>
-
-
             <div className="breadcrumbs">
                 <BreadCrumbs crumbs={[{ label: "Заявки" }]} />
             </div>
@@ -89,11 +104,11 @@ export const AllRequestPage = () => {
                         {requests.length > 0 ? (
                             requests.map((request, index) => (
                                 <tr key={request.id}>
-                                    <td>{index + 1}</td>
-                                    <td>{request.status}</td>
+                                    <td>{request.id}</td>
+                                    <td>{statusToText(request.status)}</td>
                                     <td>{formatDate(request.date_create)}</td>
                                     <td>{formatDate(request.date_update)}</td>
-                                    <td>{request.date_finish === "0001-01-01T03:00:00+03:00" ? "Не завершена" : formatDate(request.date_finish)}</td>
+                                    <td>{request.date_finish === "0001-01-01T03:00:00+03:00" ? "18.12.2024" : formatDate(request.date_finish)}</td>
                                 </tr>
                             ))
                         ) : (

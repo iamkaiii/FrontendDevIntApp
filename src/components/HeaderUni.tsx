@@ -3,11 +3,12 @@ import "./HeaderUni.css";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ROUTES } from "../modules/Routes";
+import { useEffect } from "react";
 
 export const HeaderUni: FC = () => {
     const navigate = useNavigate();
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!localStorage.getItem("token"));
-    const [login, setLogin] = useState<string>(localStorage.getItem("login") || "");
+    const [login, setLogin] = useState<string>(localStorage.getItem("login") || "Утерян");
 
     // Обработчик для кнопки входа/выхода
     const handleAuthButtonClick = () => {
@@ -26,7 +27,9 @@ export const HeaderUni: FC = () => {
     const handleProfileClick = () => {
         navigate(ROUTES.PROFILE);
     };
-
+    useEffect(() => {
+        setLogin(localStorage.getItem("login") || "Утеряно");
+      });
     return (
         <>
             <div className="super-header-main">

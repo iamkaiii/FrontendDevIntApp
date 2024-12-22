@@ -94,6 +94,7 @@ export const BasketPage: FC = () => {
 
     // Обработчик удаления блюда
     const handleDeleteProduct = async (mealId: number) => {
+        console.log(mealId, id);
         try {
             const requestBody: SchemasDeleteMealFromMilkReqRequest = {
                 meal_id: mealId,
@@ -103,6 +104,7 @@ export const BasketPage: FC = () => {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
+                withCredentials: true, // Добавлено сюда
             });
             // После успешного удаления блюда обновим корзину
             setBasketData((prevData) => {
@@ -112,13 +114,14 @@ export const BasketPage: FC = () => {
                 }
                 return prevData;
             });
-
+    
             alert("Продукт успешно удален.");
         } catch (err) {
             console.error("Ошибка при удалении продукта:", err);
             alert("Произошла ошибка при удалении продукта.");
         }
     };
+    
 
     if (loading) {
         return <div>Загрузка данных...</div>;

@@ -2,12 +2,12 @@ import { MilkProducts, ApiResponse, ApiResponseGetAllProds, MilkRequestResponse,
 import { MOCK_DATA_PRODUCTS } from "./MockDataProducts";
 import { api } from "../api";
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { DsMilkRequests, SchemasChangePassword, SchemasResponseMessage } from "../api/Api";
+import { DsMilkRequests, SchemasChangePassword, SchemasDeleteMealFromMilkReqRequest, SchemasResponseMessage } from "../api/Api";
 
 export const getProductsByName = async (name: string): Promise<ApiResponse> => {
     try {
 
-        const response = await fetch(`http://localhost:8001/api/secret/get_meal_by_meal_info/${name}`);
+        const response = await fetch(`/api/secret/get_meal_by_meal_info/${name}`);
         const info = await response.json();
         console.log(info);
         return { MilkProducts: info["meals"]};
@@ -30,7 +30,7 @@ export const getProductByID = async (
     id: string | number
 ): Promise<MilkProducts> => {
     try {
-        const response = await fetch(`http://localhost:8001/api/meal/${id}`);
+        const response = await fetch(`/api/meal/${id}`);
         const info = await response.json();
         console.log(info);
         return info["meal"];
@@ -51,7 +51,7 @@ export const getAllProducts = async (): Promise<ApiResponseGetAllProds> => {
             ? { Authorization: `Bearer ${token}` }
             : {};
 
-        const response = await fetch(`http://localhost:8001/api/meals`, {
+        const response = await fetch(`/api/meals`, {
             method: "GET",
             headers, // Передаем заголовки
         });
@@ -184,6 +184,123 @@ export const changePasswordThunk = createAsyncThunk<
       } else {
         return rejectWithValue('Произошла ошибка при смене пароля.');
       }
+    }
+  }
+);
+
+interface YourStateType {
+  auth: {
+    token: string | null;
+  };
+  basket: {
+    id: string;
+  };
+}
+
+
+export const deleteProductThunk = createAsyncThunk<
+  void, 
+  number, 
+  { rejectValue: string }
+>(
+  'basket/deleteProduct',
+  async (mealId: number, { rejectWithValue, getState }) => {
+    try {
+      const state = getState() as YourStateType; // Замените на тип вашего состояния
+      const token = state.auth.token; // Замените на получение токена из вашего состояния
+
+      if (!token) {
+        return rejectWithValue('Ошибка авторизации. Токен отсутствует.');
+      }
+
+      const requestBody: SchemasDeleteMealFromMilkReqRequest = {
+        meal_id: mealId,
+      };
+
+      await api.api.milkReqMealsDelete(state.basket.id, requestBody, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return; // После успешного удаления продукта обновляется состояние корзины в компоненте
+
+    } catch (err) {
+      console.error("Ошибка при удалении продукта:", err);
+      
+    }
+  }
+);
+
+
+interface YourStateType1 {
+  auth: {
+    token: string | null;
+  };
+  basket: {
+    id: number;
+  };
+}
+
+
+export const deleteBasketThunk = createAsyncThunk<
+  void, 
+  void, 
+  { rejectValue: string }
+>(
+  'basket/deleteBasket',
+  async (_, { rejectWithValue, getState }) => {
+    try {
+      const state = getState() as YourStateType1; // Замените на тип вашего состояния
+      const token = state.auth.token; // Получение токена из состояния
+
+      if (!token) {
+        return rejectWithValue('Ошибка авторизации. Токен отсутствует.');
+      }
+
+      await api.api.milkRequestDelete(state.basket.id!, {}, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return; // После успешного удаления заявки происходит перенаправление на главную страницу в компоненте
+
+    } catch (err) {
+      console.error("Ошибка при удалении заявки:", err);
+      
+    }
+  }
+);
+
+
+
+export const confirmBasketThunk = createAsyncThunk<
+  void, 
+  void, 
+  { rejectValue: string }
+>(
+  'basket/confirmBasket',
+  async (_, { rejectWithValue, getState }) => {
+    try {
+      const state = getState() as YourStateType1; // Замените на тип вашего состояния
+      const token = state.auth.token; // Получение токена из состояния
+
+      if (!token) {
+        return rejectWithValue('Ошибка авторизации. Токен отсутствует.');
+      }
+
+      await api.api.milkRequestFormUpdate(state.basket.id!, {}, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return; // После успешного оформления заявки происходит перенаправление на главную страницу в компоненте
+
+    } catch (err) {
+      console.error("Ошибка при оформлении заявки:", err);
+      
     }
   }
 );

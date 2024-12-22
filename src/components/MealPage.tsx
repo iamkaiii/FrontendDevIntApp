@@ -6,6 +6,7 @@ import { Link, useParams } from 'react-router-dom';
 import { BreadCrumbs } from "../components/BreadCrumbs"
 
 import './MealPage.css';
+import { HeaderUni } from './HeaderUni';
 
 export const MealPage: FC = () => {
     const [mealInfo, setMealInfo] = useState<MilkProducts>();
@@ -48,14 +49,9 @@ export const MealPage: FC = () => {
 
     return (
         <div className="space1">
-            <div className="header-welcome">
-                    <Link to={ROUTES.START}>
-                        <button className="home-button"></button>
-                    </Link>
-                    <Link to={ROUTES.HOME} className="no-underline">
-                        <h2 className="h1-welcome">Продукты</h2>
-                    </Link>
-            </div>
+            <div className="header-backet">
+                            <HeaderUni />
+                        </div>
 
             <div className="crumbs1">
                 <div className="MP_breadcrumbs1">

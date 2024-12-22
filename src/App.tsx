@@ -8,8 +8,13 @@ import { AuthPage } from "./components/AuthPage";
 import { ProfilePage } from "./components/ProfilePage";
 import { BasketPage } from "./components/BasketPage"
 import { AllRequestPage } from "./components/AllRequestsPage";
+import { useEffect } from "react";
 
 function App() {
+
+  useEffect(() => {
+    return localStorage.removeItem("login");
+  });
   return (
     <BrowserRouter basename="/">
     <Routes>
