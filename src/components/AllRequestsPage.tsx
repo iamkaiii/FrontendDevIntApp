@@ -1,56 +1,28 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../modules/store";
+import { fetchRequestsThunk } from "../modules/thunks/allreqsThunk";
+import { HeaderUni } from "./HeaderUni";
+import { BreadCrumbs } from "./BreadCrumbs";
 import { Link } from "react-router-dom";
 import { ROUTES } from "../modules/Routes";
-import { BreadCrumbs } from "../components/BreadCrumbs";
-import { api } from "../api";  // Путь к сгенерированному Api
-import { HeaderUni } from "./HeaderUni";
 import "./AllRequestPage.css"; // Подключение стилей
-import { DsMilkRequests } from "../api/Api";
+
 
 export const AllRequestPage = () => {
-    const [requests, setRequests] = useState<DsMilkRequests[]>([]); // Стейт для хранения списка заявок
-    const [loading, setLoading] = useState<boolean>(true); // Стейт для загрузки
-    const [error, setError] = useState<string | null>(null); // Стейт для ошибки
-
-    // Получаем токен из localStorage
-    const token = localStorage.getItem('token');
-
-    // Вызов API для получения заявок
-    const fetchRequests = async () => {
-        try {
-            if (token) {
-                // Отправляем запрос с Bearer токеном и статусом 7 в query параметре
-                const response = await api.api.milkRequestsList(
-                    { status: 7 }, // Передаем статус 7 в query
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`, // Используем Bearer Auth
-                        }
-                    }
-                );
-                console.log(response)
-                const MilkRequests = response.data["MilkRequests"] || []; // Используем пустой массив по умолчанию
-                console.log(MilkRequests)
-                setRequests(MilkRequests);  
-            } else {
-                setError("Токен не найден.");
-            }
-        } catch (err) {
-            console.error("Ошибка при загрузке заявок:", err);
-            setError("Произошла ошибка при загрузке заявок.");
-        } finally {
-            setLoading(false); // Завершаем загрузку
-        }
-    };
+    const dispatch = useDispatch();
+    const { requests, loading, error } = useSelector((state: RootState) => state.requests);
 
     useEffect(() => {
-        fetchRequests();
-    }, []); // Вызываем fetchRequests один раз при монтировании компонента
+        //@ts-ignore
+        dispatch(fetchRequestsThunk());
+    }, [dispatch]);
 
-    // Функция для форматирования даты
     const formatDate = (dateString: string) => {
         const date = new Date(dateString);
-        return `${date.getDate().toString().padStart(2, '0')}.${(date.getMonth() + 1).toString().padStart(2, '0')}.${date.getFullYear()}`;
+        return `${date.getDate().toString().padStart(2, "0")}.${(date.getMonth() + 1)
+            .toString()
+            .padStart(2, "0")}.${date.getFullYear()}`;
     };
 
     if (loading) {
@@ -80,7 +52,6 @@ export const AllRequestPage = () => {
 
     return (
         <div className="all-requests-page">
-            
             <div className="header-backet">
                 <HeaderUni />
             </div>
@@ -108,7 +79,11 @@ export const AllRequestPage = () => {
                                     <td>{statusToText(request.status)}</td>
                                     <td>{formatDate(request.date_create)}</td>
                                     <td>{formatDate(request.date_update)}</td>
-                                    <td>{request.date_finish === "0001-01-01T03:00:00+03:00" ? "18.12.2024" : formatDate(request.date_finish)}</td>
+                                    <td>
+                                        {request.date_finish === "0001-01-01T03:00:00+03:00"
+                                            ? "18.12.2024"
+                                            : formatDate(request.date_finish)}
+                                    </td>
                                 </tr>
                             ))
                         ) : (

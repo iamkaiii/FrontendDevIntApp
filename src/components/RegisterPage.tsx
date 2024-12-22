@@ -1,41 +1,33 @@
 import { FC, useState } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { ROUTES } from "../modules/Routes";
-import { api } from '../api';  // Путь к сгенерированному Api
 import "./RegisterPage.css";
-
-interface RegisterUserResponse {
-    message: string;
-  }
+import { AppDispatch, RootState } from "../modules/store";
+import { registerUser } from "../modules/thunks/registerThunk";
 
 export const RegisterPage: FC = () => {
     const [login, setLogin] = useState<string>("");
     const [password, setPassword] = useState<string>("");
-    const [message, setMessage] = useState<string | null>(null); // Для сообщения от сервера
+    const [message, setMessage] = useState<string | null>(null);
 
-    const handleAuth = async () => {
-        try {
-            const response = await api.api.registerUserCreate({
-                login,
-                password,
-            });
-            const data = response.data as RegisterUserResponse;
+    const dispatch = useDispatch<AppDispatch>();
 
-            // Устанавливаем сообщение из ответа сервера
-            setMessage(data.message || "Успех");
-        } catch (err: any) {
-            if (err.response?.status === 500 && err.response?.data?.message) {
-                setMessage(err.response.data.message); // Сообщение от сервера при 500
-            } else if (err.response?.data?.error) {
-                setMessage(err.response.data.error); // Сообщение для других ошибок
-            } else {
+    const { loading } = useSelector((state: RootState) => state.auth);
+
+    const handleAuth = () => {
+        dispatch(registerUser({ login, password }))
+            .unwrap()
+            .then((data) => {
+                setMessage(data.message || "Успех");
+            })
+            .catch(() => {
                 setMessage("Произошла ошибка. Попробуйте снова."); // Общая ошибка
-            }
-        }
+            });
     };
 
     return (
-        <>  
+        <>
             <div className="space-reg">
                 <div className="super-header">
                     <Link to={ROUTES.START}>
@@ -71,11 +63,10 @@ export const RegisterPage: FC = () => {
                             />
                         </div>
 
-                        {/* Вывод сообщения от сервера */}
                         {message && <div className="server-message">{message}</div>}
 
-                        <button className="button-auth" onClick={handleAuth}>
-                            Зарегистрироваться
+                        <button className="button-auth" onClick={handleAuth} disabled={loading}>
+                            {loading ? "Загрузка..." : "Зарегистрироваться"}
                         </button>
                     </div>
                 </div>

@@ -1,127 +1,54 @@
-import { FC, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import "./AuthPage.css";
-import "./BasketPage.css"; // Подключаем стили корзины
+// @ts-nocheck
+
+import { FC, useEffect } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import "./BasketPage.css";
 import { HeaderUni } from "./HeaderUni";
 import { BreadCrumbs } from "../components/BreadCrumbs";
-import { MilkRequestResponse } from "../modules/MyInterface";
-import { getMilkRequestByID } from "../modules/ApiProducts";
-import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../modules/store";
+import {
+    fetchBasketData,
+    confirmBasket,
+    deleteBasket,
+    deleteProductFromBasket,
+} from "../modules/slices/basketSlice";
 import { ROUTES } from "../modules/Routes";
-import { api } from '../api';  // Путь к сгенерированному Api
-import { SchemasDeleteMealFromMilkReqRequest } from "../api/Api";
 
+    
 export const BasketPage: FC = () => {
     const { id } = useParams<{ id: string }>();
-    const [basketData, setBasketData] = useState<MilkRequestResponse | null>(null);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
+    const dispatch = useDispatch();
     const navigate = useNavigate();
+    const { basketData, loading, error } = useSelector((state: RootState) => state.basket);
+
+    useEffect(() => {
+        console.log(navigate)
+        if (id) {
+            dispatch(fetchBasketData(Number(id)));
+        }
+    }, [id, dispatch]);
 
     const calculateDeliveryDate = (): string => {
         const today = new Date();
-        today.setDate(today.getDate() + 5); // Прибавляем 5 дней
-        const day = today.getDate().toString().padStart(2, '0');
-        const month = (today.getMonth() + 1).toString().padStart(2, '0'); // Месяц от 1 до 12
+        today.setDate(today.getDate() + 5);
+        const day = today.getDate().toString().padStart(2, "0");
+        const month = (today.getMonth() + 1).toString().padStart(2, "0");
         const year = today.getFullYear();
-        return `${day}.${month}.${year}`; // Форматируем дату как ДД.ММ.ГГГГ
+        return `${day}.${month}.${year}`;
     };
 
-
-    useEffect(() => {
-        const fetchBasketData = async () => {
-            if (!id) {
-                setError("ID заявки отсутствует в URL.");
-                setLoading(false);
-                return;
-            }
-
-            try {
-                const data = await getMilkRequestByID(parseInt(id));
-                console.log("Данные, полученные от нашего API по заявке", data);
-                if (data) {
-                    setBasketData(data);
-                } else {
-                    setError("Не удалось получить данные корзины.");
-                }
-            } catch (err) {
-                console.error("Ошибка при загрузке данных корзины:", err);
-                setError("Произошла ошибка при загрузке данных.");
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchBasketData();
-    }, [id]);
-
-    // Получаем токен из localStorage
-    const token = localStorage.getItem('token');
-
-    // Обработчик оформления заявки
-    const handleConfirm = async () => {
-        try {
-            // Вызовите метод API для оформления заявки с Bearer Auth
-            await api.api.milkRequestFormUpdate(parseInt(id!), {}, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            // После успешного выполнения запроса, перенаправим на домашнюю страницу
-            navigate(ROUTES.HOME);
-        } catch (err) {
-            console.error("Ошибка при оформлении заявки:", err);
-            alert("Произошла ошибка при оформлении заявки.");
-        }
+    const handleConfirm = () => {
+        if (id) dispatch(confirmBasket(Number(id)));
     };
 
-    // Обработчик удаления заявки
-    const handleDeleteBasket = async () => {
-        try {
-            // Вызовите метод API для удаления заявки с Bearer Auth
-            await api.api.milkRequestDelete(parseInt(id!), {}, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            // После успешного выполнения запроса, перенаправим на домашнюю страницу
-            navigate(ROUTES.HOME);
-        } catch (err) {
-            console.error("Ошибка при удалении заявки:", err);
-            alert("Произошла ошибка при удалении заявки.");
-        }
+    const handleDeleteBasket = () => {
+        if (id) dispatch(deleteBasket(Number(id)));
     };
 
-    // Обработчик удаления блюда
-    const handleDeleteProduct = async (mealId: number) => {
-        console.log(mealId, id);
-        try {
-            const requestBody: SchemasDeleteMealFromMilkReqRequest = {
-                meal_id: mealId,
-            };
-            // Вызовите метод API для удаления блюда с Bearer Auth
-            await api.api.milkReqMealsDelete(id!, requestBody, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-                withCredentials: true, // Добавлено сюда
-            });
-            // После успешного удаления блюда обновим корзину
-            setBasketData((prevData) => {
-                if (prevData) {
-                    const updatedMeals = prevData.MilkRequesMeals.filter(meal => meal.id !== mealId);
-                    return { ...prevData, MilkRequesMeals: updatedMeals };
-                }
-                return prevData;
-            });
-    
-            alert("Продукт успешно удален.");
-        } catch (err) {
-            console.error("Ошибка при удалении продукта:", err);
-            alert("Произошла ошибка при удалении продукта.");
-        }
+    const handleDeleteProduct = (mealId: number) => {
+        if (id) dispatch(deleteProductFromBasket({ requestId: Number(id), mealId }));
     };
-    
 
     if (loading) {
         return <div>Загрузка данных...</div>;
@@ -137,9 +64,7 @@ export const BasketPage: FC = () => {
                 <HeaderUni />
             </div>
             <div className="crumbs">
-                <div className="MP_breadcrumbs">
-                    <BreadCrumbs crumbs={[{ label: "Заявка" }]} />
-                </div>
+                <BreadCrumbs crumbs={[{ label: "Заявка" }]} />
             </div>
             <div className="container-basket">
                 <div className="basket-cards">
@@ -150,8 +75,8 @@ export const BasketPage: FC = () => {
                                 <h3>{meal.meal_info}</h3>
                                 <p>{meal.meal_weight}</p>
                             </div>
-                            <button 
-                                onClick={() => handleDeleteProduct(meal.id)} 
+                            <button
+                                onClick={() => handleDeleteProduct(meal.id)}
                                 className="delete-product-btn"
                             >
                                 Удалить
@@ -160,12 +85,18 @@ export const BasketPage: FC = () => {
                     ))}
                 </div>
                 <div className="basket-summary">
-                    <p><strong>Дата доставки:</strong> {calculateDeliveryDate() || "Не указана"}</p>
-                    <p><strong>Адрес:</strong> {basketData?.MilkRequest.address || "Таможенный проезд, д. 10"}</p>
-                    <div className="basket-actions">
-                        <button onClick={handleConfirm} className="action-btn confirm-btn">Оформить заявку</button>
-                        <button onClick={handleDeleteBasket} className="action-btn delete-btn">Удалить заявку</button>
-                    </div>
+                    <p><strong>Дата доставки:</strong> {calculateDeliveryDate()}</p>
+                    <p><strong>Адрес:</strong> {basketData?.MilkRequest.address || "Не указан"}</p>
+                    <Link to={ROUTES.HOME} className="no-underline">
+                        <div className="basket-actions">
+                            <button onClick={handleConfirm} className="action-btn confirm-btn">
+                                    Оформить заявку
+                            </button>
+                            <button onClick={handleDeleteBasket} className="action-btn delete-btn">
+                                    Удалить заявку
+                            </button>
+                        </div>
+                    </Link>
                 </div>
             </div>
         </>

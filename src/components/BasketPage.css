@@ -5,6 +5,7 @@
     max-width: 1200px; /* Ограничиваем ширину контейнера */
 }
 
+
 .basket-cards {
     display: flex;
     flex-direction: column;

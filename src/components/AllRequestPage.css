@@ -73,7 +73,7 @@ h1 {
 
 /* Кнопка "Вернуться на главную" */
 .back-home-btn {
-    background-color: #c22; /* Изменен цвет кнопки */
+    background-color: #c22; /* Основной цвет кнопки */
     color: white;
     padding: 10px 20px;
     text-decoration: none;
@@ -81,10 +81,16 @@ h1 {
     font-size: 16px;
     display: inline-block;
     transition: background-color 0.3s ease;
+    border: none; /* Убираем границу */
+    outline: none; /* Убираем выделение */
 }
 
-.back-home-btn:hover {
-    background-color: #9a1e1e; /* Немного темнее при наведении */
+.back-home-btn:hover, 
+.back-home-btn:focus {
+    background-color: #9a1e1e; /* Цвет при наведении */
+    outline: none; /* Убираем выделение при фокусе */
+    text-decoration: none; /* Убираем подчеркивание */
+    color:white
 }
 
 /* Класс для улучшенной визуализации таблицы на мобильных устройствах */

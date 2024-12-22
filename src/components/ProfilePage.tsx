@@ -30,9 +30,6 @@ export const ProfilePage = () => {
         );
     }
 
-    
-
-
 
     const handleChangePassword = async () => {
         if (!oldPassword || !newPassword) {

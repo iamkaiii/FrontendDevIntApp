@@ -1,17 +1,18 @@
 import { FC } from "react";
 import { MilkProducts } from "../modules/MyInterface";
 import "./MainPage.css";
-import { api } from "../api"; // Импорт API
-
+import { useDispatch } from 'react-redux'; // Используем useDispatch для получения функции dispatch
+import { addMealToMilkRequest } from "../modules/thunks/addproducttobasketThunk"; // Импорт вашего thunks
 
 interface OneMilkProduct {
     product: MilkProducts;
     imageClickHandler: () => void;
-    checkAndUpdateMilkRequestID: () => Promise<void>; // Новый проп для проверки milkRequestID
+    checkAndUpdateMilkRequestID: () => Promise<void>;
 }
 
 export const OneProduct: FC<OneMilkProduct> = ({ product, imageClickHandler, checkAndUpdateMilkRequestID }) => {
     const token = localStorage.getItem("token");
+    const dispatch = useDispatch(); // Используем useDispatch для получения функции dispatch
 
     const handleAddMeal = async () => {
         if (!token) {
@@ -20,24 +21,12 @@ export const OneProduct: FC<OneMilkProduct> = ({ product, imageClickHandler, che
         }
 
         try {
-            // Проверяем и обновляем milkRequestID, если нужно
-
-            const response = await api.api.mealToMilkRequestCreate(
-                String(product.id),
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
-            console.log("Продукт успешно добавлен в запрос:", response.data);
+            //@ts-ignore
+            dispatch(addMealToMilkRequest({ productId: (product.id), token }));
+            console.log("Продукт успешно добавлен в запрос");
             await checkAndUpdateMilkRequestID();
-        } catch (err: any) {
-            if (err.response?.data?.message) {
-                console.error("Ошибка при добавлении продукта:", err.response.data.message);
-            } else {
-                console.error("Произошла неизвестная ошибка:", err);
-            }
+        } catch (err) {
+            console.error("Произошла ошибка при добавлении продукта:", err);
         }
     };
 
